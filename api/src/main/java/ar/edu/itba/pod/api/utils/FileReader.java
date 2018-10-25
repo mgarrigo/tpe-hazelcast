@@ -1,4 +1,7 @@
-package ar.edu.itba.pod.api;
+package ar.edu.itba.pod.api.utils;
+
+import ar.edu.itba.pod.api.models.Airport;
+import ar.edu.itba.pod.api.models.Movement;
 
 import java.io.File;
 import java.io.IOException;

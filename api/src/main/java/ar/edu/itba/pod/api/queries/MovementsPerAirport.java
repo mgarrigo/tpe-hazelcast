@@ -1,8 +1,14 @@
-package ar.edu.itba.pod.api;
+package ar.edu.itba.pod.api.queries;
 
+import ar.edu.itba.pod.api.models.Airport;
+import ar.edu.itba.pod.api.models.Movement;
 import ar.edu.itba.pod.api.collators.MovementCollator;
 import ar.edu.itba.pod.api.mappers.MovementMapper;
 import ar.edu.itba.pod.api.reducers.MovementCountReducerFactory;
+import ar.edu.itba.pod.api.utils.AirportImporter;
+import ar.edu.itba.pod.api.utils.FileReader;
+import ar.edu.itba.pod.api.utils.MovementsImporter;
+import ar.edu.itba.pod.api.utils.ParallelStreamFileReader;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ICompletableFuture;
 import com.hazelcast.core.IList;
@@ -37,9 +43,6 @@ public class MovementsPerAirport implements Runnable {
     @Override
     public void run() {
 
-        final IList<Movement> movementsIList = client.getList("movements");
-        final IMap<String, Airport> airportIMap = client.getMap("airports");
-
         FileReader fileReader = new ParallelStreamFileReader();
 
         LOGGER.debug("Inicio de la lectura del archivo");
@@ -53,8 +56,14 @@ public class MovementsPerAirport implements Runnable {
             System.exit(1);
         }
 
-        movementsIList.addAll(movements);
-        airports.parallelStream().forEach(airport -> airportIMap.putIfAbsent(airport.getOaci(), airport));
+        final IList<Movement> movementsIList = client.getList("movements");
+        final IMap<String, Airport> airportIMap = client.getMap("airports");
+
+        MovementsImporter movementsImporter = new MovementsImporter();
+        AirportImporter airportImporter = new AirportImporter();
+
+        movementsImporter.importToIList(movementsIList, movements);
+        airportImporter.importToIMap(airportIMap, airports, "OACI");
 
         LOGGER.debug("Fin de la lectura del archivo");
 

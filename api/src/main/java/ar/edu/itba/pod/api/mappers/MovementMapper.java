@@ -1,7 +1,7 @@
 package ar.edu.itba.pod.api.mappers;
 
-import ar.edu.itba.pod.api.Airport;
-import ar.edu.itba.pod.api.Movement;
+import ar.edu.itba.pod.api.models.Airport;
+import ar.edu.itba.pod.api.models.Movement;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.IMap;
