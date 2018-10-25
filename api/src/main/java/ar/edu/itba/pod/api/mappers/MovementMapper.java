@@ -19,14 +19,13 @@ public class MovementMapper implements Mapper<String, Movement, String, Long>, H
 
         IMap<String, Airport> airports = instance.getMap("airports");
 
-        String origin = movement.getOrigin();
-        Optional<Airport> airport = Optional.ofNullable(airports.get(origin));
-        airport.ifPresent(ap -> context.emit(origin, 1L));
-
-        String destination = movement.getDestination();
-
-        if (!origin.equals(destination)) {
-            airport = Optional.ofNullable(airports.get(destination));
+        if (movement.getMovementType().equals("Despegue")) {
+            String origin = movement.getOrigin();
+            Optional<Airport> airport = Optional.ofNullable(airports.get(origin));
+            airport.ifPresent(ap -> context.emit(origin, 1L));
+        }else {
+            String destination = movement.getDestination();
+            Optional<Airport> airport = Optional.ofNullable(airports.get(destination));
             airport.ifPresent(ap -> context.emit(destination, 1L));
         }
     }
