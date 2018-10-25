@@ -22,6 +22,22 @@ public class Airport implements DataSerializable {
         this.province = province;
     }
 
+    public String getOaci() {
+        return oaci;
+    }
+
+    public String getIata() {
+        return iata;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
     @Override
     public void writeData(ObjectDataOutput out) throws IOException {
         out.writeUTF(oaci);

@@ -13,6 +13,8 @@ public class Movement implements DataSerializable {
 	private String origin;
 	private String destination;
 
+	public Movement(){}
+
 	public Movement(String flightType, String movementType, String origin, String destination) {
 		this.flightType = flightType;
 		this.movementType = movementType;
