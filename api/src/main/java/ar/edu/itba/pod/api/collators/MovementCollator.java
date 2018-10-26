@@ -11,7 +11,12 @@ public class MovementCollator implements Collator<Map.Entry<String, Long>, List<
         for (Map.Entry<String, Long> value : values) {
             result.add(value);
         }
-        result.sort(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()));
+
+        /* Order by descending number of movements */
+        Comparator<Map.Entry<String, Long>> c = Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder());
+        /* Order by OACI */
+        c = c.thenComparing(Comparator.comparing(Map.Entry::getKey));
+        result.sort(c);
         return result;
     }
 }
