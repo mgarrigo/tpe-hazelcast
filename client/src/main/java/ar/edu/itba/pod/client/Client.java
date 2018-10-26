@@ -3,6 +3,7 @@ package ar.edu.itba.pod.client;
 import ar.edu.itba.pod.api.queries.MovementsPerAirport;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
+import com.hazelcast.client.config.ClientNetworkConfig;
 import com.hazelcast.core.HazelcastInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,15 +18,29 @@ public class Client {
 		LOGGER.info("tpe-hazelcast Client Starting ...");
 
 		ClientConfig clientConfig = new ClientConfig();
+		ClientNetworkConfig networkConfig = clientConfig.getNetworkConfig();
 		clientConfig.getGroupConfig().setName("tpe").setPassword("asdasd");
 
+		Parameters p = new Parameters();
+		networkConfig.addAddress(p.getAddresses().split(","));
 
 		HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);
 
-		File airportsFile = new File(Client.class.getClassLoader().getResource("aeropuertos.csv").toURI());
-		File movementsFile = new File(Client.class.getClassLoader().getResource("movimientos.csv").toURI());
+		File airportsFile = new File(Client.class.getClassLoader().getResource(p.getAirportsInPath()).toURI());
+		File movementsFile = new File(Client.class.getClassLoader().getResource(p.getMovementsInPath()).toURI());
 
-		MovementsPerAirport mv = new MovementsPerAirport(client, airportsFile, movementsFile);
-		mv.run();
+		Runnable query;
+
+		switch (p.getQuery()){
+			case "1":
+				query = new MovementsPerAirport(client, airportsFile, movementsFile);
+				break;
+			default:
+				LOGGER.error("Invalid query number.");
+				return;
+		}
+
+		query.run();
+		client.shutdown();
 	}
 }
