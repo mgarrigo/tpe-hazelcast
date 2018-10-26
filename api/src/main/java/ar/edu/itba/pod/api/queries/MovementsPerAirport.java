@@ -26,64 +26,63 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class MovementsPerAirport implements Runnable {
+public class MovementsPerAirport extends Query {
 
-    private HazelcastInstance client;
-    private File airportsFile;
-    private File movementsFile;
+    private IList<Movement> movementsIList;
+    private IMap<String, Airport> airportIMap;
+    private List<Map.Entry<String, Long>> result;
 
     private static Logger LOGGER = LoggerFactory.getLogger(MovementsPerAirport.class);
 
-    public MovementsPerAirport(HazelcastInstance client, File airportsFile, File movementsFile){
-        this.client = client;
-        this.airportsFile = airportsFile;
-        this.movementsFile = movementsFile;
+    public MovementsPerAirport(HazelcastInstance client, File airportsFile, File movementsFile) {
+        super(client, airportsFile, movementsFile);
     }
 
-    @Override
-    public void run() {
+    public void readFiles(){
 
         FileReader fileReader = new ParallelStreamFileReader();
 
-        LOGGER.debug("Inicio de la lectura del archivo");
         Collection<Airport> airports = null;
         Collection<Movement> movements = null;
         try {
-            airports = fileReader.readAirports(airportsFile);
-            movements = fileReader.readMovements(movementsFile);
+            airports = fileReader.readAirports(getAirportsFile());
+            movements = fileReader.readMovements(getMovementsFile());
         } catch (IOException e) {
             LOGGER.error("Error reading files");
             System.exit(1);
         }
 
-        final IList<Movement> movementsIList = client.getList("movements");
-        final IMap<String, Airport> airportIMap = client.getMap("airports");
+        movementsIList = getClient().getList("movements");
+        airportIMap = getClient().getMap("airports");
 
         MovementsImporter movementsImporter = new MovementsImporter();
         AirportImporter airportImporter = new AirportImporter();
 
         movementsImporter.importToIList(movementsIList, movements);
         airportImporter.importToIMap(airportIMap, airports, "OACI");
+    }
 
-        LOGGER.debug("Fin de la lectura del archivo");
+    public void mapReduce(){
 
-        JobTracker jobTracker = client.getJobTracker("movement-count");
+        JobTracker jobTracker = getClient().getJobTracker("movement-count");
         final KeyValueSource<String, Movement> source = KeyValueSource.fromList(movementsIList);
         Job<String, Movement> job = jobTracker.newJob(source);
 
-        LOGGER.info("Inicio del trabajo map/reduce");
         ICompletableFuture<List<Map.Entry<String, Long>>> future = job
                 .mapper( new MovementMapper() )
                 .reducer( new MovementCountReducerFactory() )
                 .submit( new MovementCollator() );
 
-        List<Map.Entry<String, Long>> result = null;
+        result = null;
         try {
             result = future.get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-        LOGGER.info("Fin del trabajo map/reduce");
+    }
+
+    @Override
+    public void log() {
 
         System.out.println("OACI;Denominación;Movimientos");
         for (Map.Entry<String, Long> e : result){

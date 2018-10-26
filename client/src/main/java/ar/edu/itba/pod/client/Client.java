@@ -1,6 +1,8 @@
 package ar.edu.itba.pod.client;
 
+import ar.edu.itba.pod.api.queries.MovementPairs;
 import ar.edu.itba.pod.api.queries.MovementsPerAirport;
+import ar.edu.itba.pod.api.queries.Query;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
@@ -29,18 +31,27 @@ public class Client {
 		File airportsFile = new File(Client.class.getClassLoader().getResource(p.getAirportsInPath()).toURI());
 		File movementsFile = new File(Client.class.getClassLoader().getResource(p.getMovementsInPath()).toURI());
 
-		Runnable query;
+		Query query;
 
 		switch (p.getQuery()){
 			case "1":
 				query = new MovementsPerAirport(client, airportsFile, movementsFile);
 				break;
-			default:
+            case "2":
+                query = new MovementPairs(client, airportsFile, movementsFile);
+                break;
+            default:
 				LOGGER.error("Invalid query number.");
 				return;
 		}
 
-		query.run();
+		LOGGER.info("Inicio de la lectura de archivos");
+		query.readFiles();
+		LOGGER.info("Fin de la lectura de archivos");
+		LOGGER.info("Inicio del trabajo map/reduce");
+		query.mapReduce();
+		LOGGER.info("Fin del trabajo map/reduce");
+		query.log();
 		client.shutdown();
 	}
 }
