@@ -1,9 +1,6 @@
 package ar.edu.itba.pod.client;
 
-import ar.edu.itba.pod.api.queries.MovementPairs;
-import ar.edu.itba.pod.api.queries.MovementsPerAirport;
-import ar.edu.itba.pod.api.queries.Query;
-import ar.edu.itba.pod.api.queries.Query4;
+import ar.edu.itba.pod.api.queries.*;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
@@ -41,6 +38,9 @@ public class Client {
             case "2":
                 query = new MovementPairs(client, airportsFile, movementsFile);
                 break;
+			case "3":
+				query = new Query3(client, airportsFile, movementsFile);
+				break;
 			case "4":
 				query = new Query4(client, airportsFile, movementsFile, p.getOaci(), Integer.valueOf(p.getN()));
 				break;
