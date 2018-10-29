@@ -5,9 +5,13 @@ import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.DataSerializable;
 
 import java.io.IOException;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Movement implements DataSerializable {
 
+	private static final AtomicInteger count = new AtomicInteger(0);
+	private Integer id = null;
 	private String flightType;
 	private String movementType;
 	private String origin;
@@ -20,6 +24,7 @@ public class Movement implements DataSerializable {
 		this.movementType = movementType;
 		this.origin = origin;
 		this.destination = destination;
+		this.id = count.incrementAndGet();
 	}
 
 	public String getFlightType() {
@@ -46,6 +51,7 @@ public class Movement implements DataSerializable {
 
 	@Override
 	public void writeData(ObjectDataOutput out) throws IOException {
+		out.writeInt(this.id);
 		out.writeUTF(this.flightType);
 		out.writeUTF(this.movementType);
 		out.writeUTF(this.origin);
@@ -54,9 +60,24 @@ public class Movement implements DataSerializable {
 
 	@Override
 	public void readData(ObjectDataInput in) throws IOException {
+		this.id = in.readInt();
 		this.flightType = in.readUTF();
 		this.movementType = in.readUTF();
 		this.origin = in.readUTF();
 		this.destination = in.readUTF();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Movement movement = (Movement) o;
+		return Objects.equals(id, movement.id);
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(id);
 	}
 }
