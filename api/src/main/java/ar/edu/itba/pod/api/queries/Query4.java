@@ -1,6 +1,7 @@
 package ar.edu.itba.pod.api.queries;
 
 import ar.edu.itba.pod.api.collators.MovementCollator;
+import ar.edu.itba.pod.api.combiner.ElementSumCombinerFactory;
 import ar.edu.itba.pod.api.mappers.Query4Mapper;
 import ar.edu.itba.pod.api.models.Movement;
 import ar.edu.itba.pod.api.predicates.DestinationKeyPredicate;
@@ -64,6 +65,7 @@ public class Query4 extends Query {
         ICompletableFuture<List<Map.Entry<String, Long>>> future = job
                 .keyPredicate( new DestinationKeyPredicate(destinationOaci) )
                 .mapper( new Query4Mapper() )
+                .combiner( new ElementSumCombinerFactory<>() )
                 .reducer( new MovementCountReducerFactory() )
                 .submit( new MovementCollator() );
 

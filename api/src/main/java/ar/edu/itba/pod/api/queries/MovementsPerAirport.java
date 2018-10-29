@@ -1,5 +1,6 @@
 package ar.edu.itba.pod.api.queries;
 
+import ar.edu.itba.pod.api.combiner.ElementSumCombinerFactory;
 import ar.edu.itba.pod.api.models.Airport;
 import ar.edu.itba.pod.api.models.Movement;
 import ar.edu.itba.pod.api.collators.MovementCollator;
@@ -70,6 +71,7 @@ public class MovementsPerAirport extends Query {
 
         ICompletableFuture<List<Map.Entry<String, Long>>> future = job
                 .mapper( new MovementMapper() )
+                .combiner( new ElementSumCombinerFactory<>() )
                 .reducer( new MovementCountReducerFactory() )
                 .submit( new MovementCollator() );
 

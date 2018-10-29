@@ -1,6 +1,7 @@
 package ar.edu.itba.pod.api.queries;
 
 import ar.edu.itba.pod.api.collators.PairMovementCollator;
+import ar.edu.itba.pod.api.combiner.PairSumCombinerFactory;
 import ar.edu.itba.pod.api.mappers.MovementBetweenAirportsMapper;
 import ar.edu.itba.pod.api.models.Movement;
 import ar.edu.itba.pod.api.reducers.PairCountReducerFactory;
@@ -62,6 +63,7 @@ public class Query3 extends Query {
 
         ICompletableFuture<Set<Map.Entry<Pair<String, String>, Pair<Long, Long>>>> future = job
                 .mapper( new MovementBetweenAirportsMapper() )
+                .combiner( new PairSumCombinerFactory<>())
                 .reducer( new PairCountReducerFactory<>())
                 .submit( new PairMovementCollator() );
 

@@ -1,6 +1,7 @@
 package ar.edu.itba.pod.api.queries;
 
 import ar.edu.itba.pod.api.collators.OrderNumberAndOACICollator;
+import ar.edu.itba.pod.api.combiner.ElementSumCombinerFactory;
 import ar.edu.itba.pod.api.mappers.UniqueMovementBetweenAirportsMapper;
 import ar.edu.itba.pod.api.models.Movement;
 import ar.edu.itba.pod.api.reducers.ThousandsCountReducerFactory;
@@ -61,6 +62,7 @@ public class MovementPairs extends Query {
 
         ICompletableFuture<Set<Map.Entry<Pair<String, String>, Long>>> future = job
                 .mapper( new UniqueMovementBetweenAirportsMapper() )
+                .combiner( new ElementSumCombinerFactory<>() )
                 .reducer( new ThousandsCountReducerFactory() )
                 .submit( new OrderNumberAndOACICollator() );
 
