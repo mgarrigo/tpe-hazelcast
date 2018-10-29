@@ -56,13 +56,13 @@ public class Query3 extends Query {
 
     @Override
     public void mapReduce() {
-        JobTracker jobTracker = getClient().getJobTracker("query4");
+        JobTracker jobTracker = getClient().getJobTracker("query3");
         final KeyValueSource<String, Movement> source = KeyValueSource.fromList(movementsIList);
         Job<String, Movement> job = jobTracker.newJob(source);
 
         ICompletableFuture<Set<Map.Entry<Pair<String, String>, Pair<Long, Long>>>> future = job
                 .mapper( new MovementBetweenAirportsMapper() )
-                .reducer( new PairCountReducerFactory<String>())
+                .reducer( new PairCountReducerFactory<>())
                 .submit( new PairMovementCollator() );
 
         try {
