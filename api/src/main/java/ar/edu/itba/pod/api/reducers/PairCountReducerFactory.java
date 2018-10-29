@@ -2,7 +2,8 @@ package ar.edu.itba.pod.api.reducers;
 
 import com.hazelcast.mapreduce.Reducer;
 import com.hazelcast.mapreduce.ReducerFactory;
-import javafx.util.Pair;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
@@ -12,10 +13,10 @@ public class PairCountReducerFactory<T extends Serializable> implements ReducerF
 
     @Override
     public Reducer<Pair<Long, Long>, Pair<Long, Long>> newReducer(Pair<T, T> tContainer) {
-        return new ContainerCountReducer();
+        return new PairCountReducer();
     }
 
-    private class ContainerCountReducer extends Reducer<Pair<Long, Long>, Pair<Long, Long>> {
+    private class PairCountReducer extends Reducer<Pair<Long, Long>, Pair<Long, Long>> {
 
         private AtomicLong fromOrigin;
         private AtomicLong toDestiny;
@@ -34,7 +35,7 @@ public class PairCountReducerFactory<T extends Serializable> implements ReducerF
 
         @Override
         public Pair<Long, Long> finalizeReduce() {
-            return new Pair<>(fromOrigin.get(), toDestiny.get());
+            return new ImmutablePair<>(fromOrigin.get(), toDestiny.get());
         }
     }
 }

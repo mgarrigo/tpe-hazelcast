@@ -1,7 +1,7 @@
 package ar.edu.itba.pod.api.collators;
 
 import com.hazelcast.mapreduce.Collator;
-import javafx.util.Pair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
