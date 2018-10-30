@@ -66,7 +66,7 @@ public class Query4 extends Query {
                 .keyPredicate( new DestinationKeyPredicate(destinationOaci) )
                 .mapper( new Query4Mapper() )
                 .combiner( new ElementSumCombinerFactory<>() )
-                .reducer( new MovementCountReducerFactory() )
+                .reducer( new MovementCountReducerFactory<>() )
                 .submit( new MovementCollator() );
 
         try {

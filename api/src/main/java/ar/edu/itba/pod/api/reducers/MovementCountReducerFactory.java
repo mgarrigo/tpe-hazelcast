@@ -5,10 +5,10 @@ import com.hazelcast.mapreduce.ReducerFactory;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-public class MovementCountReducerFactory implements ReducerFactory<String, Long, Long> {
+public class MovementCountReducerFactory<T> implements ReducerFactory<T, Long, Long> {
 
     @Override
-    public Reducer<Long, Long> newReducer(String key) {
+    public Reducer<Long, Long> newReducer(T key) {
         return new MovementCountReducer();
     }
 
