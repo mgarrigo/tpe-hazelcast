@@ -3,7 +3,7 @@
         <name>tpe</name>
         <password>asdasd</password>
     </group>
-    <management-center enabled="false">http://localhost:8080/mancenter</management-center>
+    <management-center enabled="true">http://localhost:8080/mancenter</management-center>
     <network>
         <port auto-increment="true" port-count="100">5701</port>
         <outbound-ports>
@@ -39,6 +39,7 @@
         </join>
         <interfaces enabled="true">
             <interface>127.0.0.*</interface>
+            <interface>10.17.32.*</interface>
         </interfaces>
         <ssl enabled="false"/>
         <socket-interceptor enabled="false"/>
