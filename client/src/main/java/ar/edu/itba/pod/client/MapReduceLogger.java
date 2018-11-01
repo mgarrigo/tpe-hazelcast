@@ -26,7 +26,7 @@ public class MapReduceLogger {
     public void info(String description) throws IOException {
         Date dNow = new Date( );
         SimpleDateFormat ft =
-                new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss:SS");
+                new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss:SSSS");
         StringBuilder sb = new StringBuilder();
         sb.append(ft.format(dNow)).append(" INFO ");
         sb.append(this.logClass).append(" ");
