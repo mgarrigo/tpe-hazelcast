@@ -22,6 +22,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -85,13 +89,20 @@ public class MovementsPerAirport extends Query {
     }
 
     @Override
-    public void log() {
+    public void log(Path path) {
 
-        System.out.println("OACI;Denominación;Movimientos");
-        for (Map.Entry<String, Long> e : result){
-            String oaci = e.getKey();
-            System.out.println(oaci + ";" +  airportIMap.get(oaci).getName() + ";" + e.getValue());
+        String header = "OACI;Denominación;Movimientos\n";
+        try {
+            Files.write(path, header.getBytes());
+
+            for (Map.Entry<String, Long> e : result) {
+                String oaci = e.getKey();
+                String out = oaci + ";" + airportIMap.get(oaci).getName() + ";" + e.getValue() + "\n";
+                Files.write(path, out.getBytes(), StandardOpenOption.APPEND);
+            }
         }
-
+        catch (IOException e) {
+            LOGGER.error("Error writing to out file");
+        }
     }
 }

@@ -20,6 +20,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -75,8 +79,17 @@ public class MovementPairs extends Query {
     }
 
     @Override
-    public void log() {
-        System.out.println("Grupo;Aeropuerto A;Aeropuerto B");
-        result.forEach(e -> System.out.println(e.getValue() + ";" + e.getKey().getKey() + ";" + e.getKey().getValue()));
+    public void log(Path path) {
+        String header = "Grupo;Aeropuerto A;Aeropuerto B\n";
+        try {
+            Files.write(path, header.getBytes());
+            for (Map.Entry<Pair<String, String>, Long> e : result){
+                String out = e.getValue() + ";" + e.getKey().getKey() + ";" + e.getKey().getValue() + "\n";
+                Files.write(path, out.getBytes(), StandardOpenOption.APPEND);
+            }
+        }
+        catch (IOException e) {
+            LOGGER.error("Error writing to out file");
+        }
     }
 }

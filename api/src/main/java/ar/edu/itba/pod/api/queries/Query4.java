@@ -18,6 +18,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -77,15 +81,22 @@ public class Query4 extends Query {
     }
 
     @Override
-    public void log() {
-        System.out.println("OACI;Aterrizajes");
-        int count = 0;
-        for (Map.Entry<String, Long> e : result){
-            String oaci = e.getKey();
-            System.out.println(oaci + ";" + e.getValue());
-            count++;
-            if (count == n)
-                break;
+    public void log(Path path) {
+        String header = "OACI;Aterrizajes\n";
+        try {
+            Files.write(path, header.getBytes());
+            int count = 0;
+            for (Map.Entry<String, Long> e : result) {
+                String oaci = e.getKey();
+                String out = oaci + ";" + e.getValue() + "\n";
+                Files.write(path, out.getBytes(), StandardOpenOption.APPEND);
+                count++;
+                if (count == n)
+                    break;
+            }
+        }
+        catch (IOException e) {
+            LOGGER.error("Error writing to out file");
         }
     }
 }
