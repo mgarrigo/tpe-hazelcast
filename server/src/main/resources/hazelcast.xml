@@ -1,6 +1,6 @@
 <hazelcast xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.5.xsd">
     <group>
-        <name>tpe</name>
+        <name>54393-56399-55382</name>
         <password>asdasd</password>
     </group>
     <management-center enabled="true">http://localhost:8080/mancenter</management-center>

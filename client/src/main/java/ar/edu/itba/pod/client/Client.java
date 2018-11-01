@@ -20,15 +20,15 @@ public class Client {
 
 		ClientConfig clientConfig = new ClientConfig();
 		ClientNetworkConfig networkConfig = clientConfig.getNetworkConfig();
-		clientConfig.getGroupConfig().setName("tpe").setPassword("asdasd");
+		clientConfig.getGroupConfig().setName("54393-56399-55382").setPassword("asdasd");
 
 		Parameters p = new Parameters();
 		networkConfig.addAddress(p.getAddresses().split(","));
 
 		HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);
 
-		File airportsFile = new File(Client.class.getClassLoader().getResource(p.getAirportsInPath()).toURI());
-		File movementsFile = new File(Client.class.getClassLoader().getResource(p.getMovementsInPath()).toURI());
+		File airportsFile = new File(p.getAirportsInPath());
+		File movementsFile = new File(p.getMovementsInPath());
 
 		Query query;
 
