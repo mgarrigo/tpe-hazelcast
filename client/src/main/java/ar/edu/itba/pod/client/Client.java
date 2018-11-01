@@ -66,12 +66,12 @@ public class Client {
 			mrlogger.info("Fin de la lectura de archivos");
 			mrlogger.info("Inicio del trabajo map/reduce");
 			query.mapReduce();
+			query.log(Paths.get(p.getOutPath()));
 			mrlogger.info("Fin del trabajo map/reduce");
 			mrlogger.close();
 		} catch (IOException e) {
 			LOGGER.error("Could not write in log");
 		}
-		query.log(Paths.get(p.getOutPath()));
 		client.shutdown();
 	}
 }
