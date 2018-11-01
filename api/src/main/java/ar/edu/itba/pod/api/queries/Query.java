@@ -32,5 +32,5 @@ public abstract class Query{
 
     public abstract void mapReduce();
 
-    public abstract void log();
+    public abstract void log(String outPath);
 }

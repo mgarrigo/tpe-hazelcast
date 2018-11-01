@@ -1,10 +1,8 @@
 package ar.edu.itba.pod.api.queries;
 
-import ar.edu.itba.pod.api.collators.MovementCollator;
 import ar.edu.itba.pod.api.collators.ProvinceCollator;
 import ar.edu.itba.pod.api.combiner.ElementSumCombinerFactory;
 import ar.edu.itba.pod.api.mappers.MovementBetweenProvincesMapper;
-import ar.edu.itba.pod.api.mappers.MovementMapper;
 import ar.edu.itba.pod.api.models.Airport;
 import ar.edu.itba.pod.api.models.Movement;
 import ar.edu.itba.pod.api.reducers.MovementCountReducerFactory;
@@ -13,7 +11,6 @@ import ar.edu.itba.pod.api.utils.FileReader;
 import ar.edu.itba.pod.api.utils.MovementsImporter;
 import ar.edu.itba.pod.api.utils.ParallelStreamFileReader;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.ICompletableFuture;
 import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Job;
@@ -26,8 +23,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -91,12 +91,19 @@ public class ProvinceQuery extends Query  {
     }
 
     @Override
-    public void log() {
+    public void log(String outPath) {
 
-        System.out.println("Provincia A;Provincia B;Movimientos");
-        for (Map.Entry<Pair<String, String>, Long> e : result){
-            System.out.println(e.getKey().getKey()+";"+e.getKey().getValue()+";"+e.getValue());
+        Path path = Paths.get(outPath);
+        String header = "Provincia A;Provincia B;Movimientos\n";
+        try{
+            Files.write(path, header.getBytes());
+            for (Map.Entry<Pair<String, String>, Long> e : result){
+                String out = e.getKey().getKey()+";"+e.getKey().getValue()+";"+e.getValue()+"\n";
+                Files.write(path, out.getBytes(), StandardOpenOption.APPEND);
+            }
         }
-
+        catch (IOException e) {
+            LOGGER.error("Error writing to out file");
+        }
     }
 }

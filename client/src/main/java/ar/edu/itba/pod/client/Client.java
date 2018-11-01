@@ -61,7 +61,7 @@ public class Client {
 		LOGGER.info("Inicio del trabajo map/reduce");
 		query.mapReduce();
 		LOGGER.info("Fin del trabajo map/reduce");
-		query.log();
+		query.log(p.getOutPath());
 		client.shutdown();
 	}
 }

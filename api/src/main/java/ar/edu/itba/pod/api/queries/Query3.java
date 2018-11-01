@@ -20,6 +20,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -75,10 +79,18 @@ public class Query3 extends Query {
     }
 
     @Override
-    public void log() {
-        System.out.println("Origen;Destino;Origen->Destino;Destino->Origen");
-        for (Map.Entry<Pair<String, String>, Pair<Long, Long>> e : result){
-            System.out.println(e.getKey().getKey() + ';' + e.getKey().getValue() + ';' + e.getValue().getKey() + ';' + e.getValue().getValue());
+    public void log(String outPath) {
+        Path path = Paths.get(outPath);
+        String header = "Origen;Destino;Origen->Destino;Destino->Origen\n";
+        try {
+            Files.write(path, header.getBytes());
+            for (Map.Entry<Pair<String, String>, Pair<Long, Long>> e : result) {
+                String out = e.getKey().getKey() + ';' + e.getKey().getValue() + ';' + e.getValue().getKey() + ';' + e.getValue().getValue() + "\n";
+                Files.write(path, out.getBytes(), StandardOpenOption.APPEND);
+            }
+        }
+        catch (IOException e) {
+            LOGGER.error("Error writing to out file");
         }
     }
 }
