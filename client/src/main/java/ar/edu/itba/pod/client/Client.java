@@ -9,8 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
+import java.util.Map;
 
 public class Client {
 	private static Logger LOGGER = LoggerFactory.getLogger(Client.class);
@@ -56,13 +58,20 @@ public class Client {
 				return;
 		}
 
-		LOGGER.info("Inicio de la lectura de archivos");
-		query.readFiles();
-		LOGGER.info("Fin de la lectura de archivos");
-		LOGGER.info("Inicio del trabajo map/reduce");
-		query.mapReduce();
-		LOGGER.info("Fin del trabajo map/reduce");
-		query.log(Paths.get(p.getOutPath()));
+		MapReduceLogger mrlogger;
+		try {
+			mrlogger = new MapReduceLogger(p.getTimeOutPath(), Client.class);
+			mrlogger.info("Inicio de la lectura de archivos");
+			query.readFiles();
+			mrlogger.info("Fin de la lectura de archivos");
+			mrlogger.info("Inicio del trabajo map/reduce");
+			query.mapReduce();
+			query.log(Paths.get(p.getOutPath()));
+			mrlogger.info("Fin del trabajo map/reduce");
+			mrlogger.close();
+		} catch (IOException e) {
+			LOGGER.error("Could not write in log");
+		}
 		client.shutdown();
 	}
 }
