@@ -45,7 +45,7 @@ public class MovementsPerAirport extends Query {
 
         Collection<Airport> airports = null;
         Collection<Movement> movements = null;
-        LOGGER.info("Lectura de disco");
+
         try {
             airports = fileReader.readAirports(getAirportsFile());
             movements = fileReader.readMovements(getMovementsFile());
@@ -53,7 +53,7 @@ public class MovementsPerAirport extends Query {
             LOGGER.error("Error reading files");
             System.exit(1);
         }
-        LOGGER.info("Fin lectura de disco");
+
         movementsIList = getClient().getList("movements");
         airportIMap = getClient().getMap("airports");
 

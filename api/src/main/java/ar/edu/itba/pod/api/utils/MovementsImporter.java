@@ -5,6 +5,7 @@ import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.MultiMap;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,15 +17,18 @@ public class MovementsImporter implements Importer<Movement> {
 
 	@Override
 	public void importToIList(IList<Movement> iList, Collection<Movement> collection) {
-		final int LIMIT = 1000;
-		List<Movement> movementsToSend = new LinkedList<>();
-		collection.parallelStream().forEach(m->{
-			movementsToSend.add(m);
-			if (movementsToSend.size() == LIMIT){
-				iList.addAll(movementsToSend);
-			}
-			movementsToSend.clear();
-		});
+        int LIMIT = 1000;
+        List<Movement> list = new ArrayList<>();
+
+        for (Movement m : collection){
+            list.add(m);
+            if (list.size() == LIMIT){
+                iList.addAll(list);
+                list.clear();
+            }
+        }
+
+        //collection.parallelStream().forEach(iList::add););
 	}
 
 	@Override
