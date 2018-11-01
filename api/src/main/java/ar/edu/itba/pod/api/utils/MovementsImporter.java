@@ -27,6 +27,8 @@ public class MovementsImporter implements Importer<Movement> {
                 list.clear();
             }
         }
+        // Add remaining
+        iList.addAll(list);
 
         //collection.parallelStream().forEach(iList::add););
 	}
