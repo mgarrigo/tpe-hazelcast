@@ -1,0 +1,4 @@
+2018-11-01 05:51:17:437 INFO class ar.edu.itba.pod.client.Client Inicio del trabajo map/reduce
+2018-11-01 05:51:24:597 INFO class ar.edu.itba.pod.client.Client Fin del trabajo map/reduce
+2018-11-01 05:52:03:54 INFO class ar.edu.itba.pod.client.Client Inicio del trabajo map/reduce
+2018-11-01 05:52:16:468 INFO class ar.edu.itba.pod.client.Client Fin del trabajo map/reduce
