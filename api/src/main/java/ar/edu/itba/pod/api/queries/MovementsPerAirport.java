@@ -89,9 +89,8 @@ public class MovementsPerAirport extends Query {
     }
 
     @Override
-    public void log(String outPath) {
+    public void log(Path path) {
 
-        Path path = Paths.get(outPath);
         String header = "OACI;Denominación;Movimientos\n";
         try {
             Files.write(path, header.getBytes());

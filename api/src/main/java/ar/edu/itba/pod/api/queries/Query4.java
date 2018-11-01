@@ -81,8 +81,7 @@ public class Query4 extends Query {
     }
 
     @Override
-    public void log(String outPath) {
-        Path path = Paths.get(outPath);
+    public void log(Path path) {
         String header = "OACI;Aterrizajes\n";
         try {
             Files.write(path, header.getBytes());

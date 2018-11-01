@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
 
 public class Client {
 	private static Logger LOGGER = LoggerFactory.getLogger(Client.class);
@@ -61,7 +62,7 @@ public class Client {
 		LOGGER.info("Inicio del trabajo map/reduce");
 		query.mapReduce();
 		LOGGER.info("Fin del trabajo map/reduce");
-		query.log(p.getOutPath());
+		query.log(Paths.get(p.getOutPath()));
 		client.shutdown();
 	}
 }

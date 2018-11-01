@@ -3,6 +3,7 @@ package ar.edu.itba.pod.api.queries;
 import com.hazelcast.core.HazelcastInstance;
 
 import java.io.File;
+import java.nio.file.Path;
 
 public abstract class Query{
 
@@ -32,5 +33,5 @@ public abstract class Query{
 
     public abstract void mapReduce();
 
-    public abstract void log(String outPath);
+    public abstract void log(Path path);
 }

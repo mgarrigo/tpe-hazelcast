@@ -25,6 +25,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -86,11 +90,19 @@ public class Query5 extends Query {
     }
 
     @Override
-    public void log() {
+    public void log(Path path) {
 
-        System.out.println("IATA;Porcentaje");
-        for (Map.Entry<Pair<String, String>, Integer> e : result){
-			System.out.println(String.format("%s;%s%%", e.getKey().getValue(), e.getValue()));
+        String header = "IATA;Porcentaje\n";
+
+        try {
+            Files.write(path, header.getBytes());
+            for (Map.Entry<Pair<String, String>, Integer> e : result) {
+                String out = String.format("%s;%s%%\n", e.getKey().getValue(), e.getValue());
+                Files.write(path, out.getBytes(), StandardOpenOption.APPEND);
+            }
+        }
+        catch (IOException e) {
+            LOGGER.error("Error writing to out file");
         }
 
     }

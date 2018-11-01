@@ -79,8 +79,7 @@ public class Query3 extends Query {
     }
 
     @Override
-    public void log(String outPath) {
-        Path path = Paths.get(outPath);
+    public void log(Path path) {
         String header = "Origen;Destino;Origen->Destino;Destino->Origen\n";
         try {
             Files.write(path, header.getBytes());

@@ -79,8 +79,7 @@ public class MovementPairs extends Query {
     }
 
     @Override
-    public void log(String outPath) {
-        Path path = Paths.get(outPath);
+    public void log(Path path) {
         String header = "Grupo;Aeropuerto A;Aeropuerto B\n";
         try {
             Files.write(path, header.getBytes());

@@ -91,9 +91,8 @@ public class ProvinceQuery extends Query  {
     }
 
     @Override
-    public void log(String outPath) {
+    public void log(Path path) {
 
-        Path path = Paths.get(outPath);
         String header = "Provincia A;Provincia B;Movimientos\n";
         try{
             Files.write(path, header.getBytes());
