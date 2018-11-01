@@ -39,11 +39,13 @@ public class Query5 extends Query {
     private IList<Movement> movementsIList;
     private IMap<String, Airport> airportIMap;
     private List<Map.Entry<Pair<String, String>, Integer>> result;
+    private int n;
 
     private static Logger LOGGER = LoggerFactory.getLogger(Query5.class);
 
-    public Query5(HazelcastInstance client, File airportsFile, File movementsFile) {
+    public Query5(HazelcastInstance client, File airportsFile, File movementsFile, int n) {
         super(client, airportsFile, movementsFile);
+        this.n = n;
     }
 
     public void readFiles(){
@@ -79,7 +81,7 @@ public class Query5 extends Query {
         ICompletableFuture<List<Map.Entry<Pair<String, String>, Integer>>> future = job
                 .mapper(new Query5Mapper())
                 .reducer(new Query5ReducerFactory())
-                .submit(new Query5Collator(5));
+                .submit(new Query5Collator(n));
 
         result = null;
         try {

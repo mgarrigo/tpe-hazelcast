@@ -46,7 +46,7 @@ public class Client {
 				query = new Query4(client, airportsFile, movementsFile, p.getOaci(), Integer.valueOf(p.getN()));
 				break;
 			case "5":
-				query = new Query5(client, airportsFile, movementsFile);
+				query = new Query5(client, airportsFile, movementsFile, Integer.valueOf(p.getN()));
 				break;
 			case "6":
 				query = new ProvinceQuery(client, airportsFile, movementsFile, new Long(p.getMin()));
