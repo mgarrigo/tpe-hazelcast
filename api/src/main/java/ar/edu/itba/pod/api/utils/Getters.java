@@ -22,7 +22,7 @@ public class Getters<T> {
 	public static String getField(Movement movement, String field) {
 		switch (field.toUpperCase()) {
 			case "FLIGHTTYPE":
-				return movement.getFlightType();
+				return movement.getFlightClasification();
 			case "MOVEMENTTYPE":
 				return movement.getMovementType();
 			case "ORIGIN":

@@ -22,19 +22,39 @@ public class Airport implements DataSerializable {
         this.province = province;
     }
 
-    public String getOaci() {
+	/**
+	 * Código OACI del aeropuerto.
+	 *
+	 * @return OACI code
+	 */
+	public String getOaci() {
         return oaci;
     }
 
-    public String getIata() {
+	/**
+	 * Código IATA del aeropuerto.
+	 *
+	 * @return IATA code
+	 */
+	public String getIata() {
         return iata;
     }
 
-    public String getName() {
+	/**
+	 * Nombre completo del aeropuerto.
+	 *
+	 * @return airport name
+	 */
+	public String getName() {
         return name;
     }
 
-    public String getProvince() {
+	/**
+	 * Provincia en la que se encuentra el aeropuerto.
+	 *
+	 * @return airport location province name
+	 */
+	public String getProvince() {
         return province;
     }
 

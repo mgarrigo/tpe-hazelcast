@@ -2,7 +2,6 @@ package ar.edu.itba.pod.api.reducers;
 
 import com.hazelcast.mapreduce.Reducer;
 import com.hazelcast.mapreduce.ReducerFactory;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.concurrent.atomic.AtomicLong;
 
