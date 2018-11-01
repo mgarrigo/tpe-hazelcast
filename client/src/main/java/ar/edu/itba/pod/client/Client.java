@@ -58,13 +58,12 @@ public class Client {
 				return;
 		}
 
-		LOGGER.info("Inicio de la lectura de archivos");
-		query.readFiles();
-		LOGGER.info("Fin de la lectura de archivos");
-//		LOGGER.info("Inicio del trabajo map/reduce");
 		MapReduceLogger mrlogger;
 		try {
 			mrlogger = new MapReduceLogger(p.getTimeOutPath(), Client.class);
+			mrlogger.info("Inicio de la lectura de archivos");
+			query.readFiles();
+			mrlogger.info("Fin de la lectura de archivos");
 			mrlogger.info("Inicio del trabajo map/reduce");
 			query.mapReduce();
 			mrlogger.info("Fin del trabajo map/reduce");
@@ -72,7 +71,6 @@ public class Client {
 		} catch (IOException e) {
 			LOGGER.error("Could not write in log");
 		}
-//		LOGGER.info("Fin del trabajo map/reduce");
 		query.log(Paths.get(p.getOutPath()));
 		client.shutdown();
 	}
