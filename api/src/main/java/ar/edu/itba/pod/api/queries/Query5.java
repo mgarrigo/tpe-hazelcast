@@ -1,12 +1,10 @@
 package ar.edu.itba.pod.api.queries;
 
-import ar.edu.itba.pod.api.collators.MovementCollator;
 import ar.edu.itba.pod.api.collators.Query5Collator;
-import ar.edu.itba.pod.api.mappers.MovementMapper;
+import ar.edu.itba.pod.api.combiner.Query5CombinerFactory;
 import ar.edu.itba.pod.api.mappers.Query5Mapper;
 import ar.edu.itba.pod.api.models.Airport;
 import ar.edu.itba.pod.api.models.Movement;
-import ar.edu.itba.pod.api.reducers.MovementCountReducerFactory;
 import ar.edu.itba.pod.api.reducers.Query5ReducerFactory;
 import ar.edu.itba.pod.api.utils.AirportImporter;
 import ar.edu.itba.pod.api.utils.FileReader;
@@ -27,7 +25,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.List;
@@ -80,6 +77,7 @@ public class Query5 extends Query {
 
         ICompletableFuture<List<Map.Entry<Pair<String, String>, Integer>>> future = job
                 .mapper(new Query5Mapper())
+				.combiner(new Query5CombinerFactory<>())
                 .reducer(new Query5ReducerFactory())
                 .submit(new Query5Collator(n));
 

@@ -6,14 +6,14 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-public class Query5ReducerFactory implements ReducerFactory<Pair<String, String>, Boolean, Integer> {
+public class Query5ReducerFactory implements ReducerFactory<Pair<String, String>, Pair<Long, Long>, Integer> {
 
 	@Override
-	public Reducer<Boolean, Integer> newReducer(Pair<String, String> pair) {
+	public Reducer<Pair<Long, Long>, Integer> newReducer(Pair<String, String> pair) {
 		return new InternationalMovementsPercentageReducer();
 	}
 
-	private class InternationalMovementsPercentageReducer extends Reducer<Boolean, Integer> {
+	private class InternationalMovementsPercentageReducer extends Reducer<Pair<Long, Long>, Integer> {
 
 		private AtomicLong internationalMovements;
 		private AtomicLong totalMovements;
@@ -25,10 +25,10 @@ public class Query5ReducerFactory implements ReducerFactory<Pair<String, String>
 		}
 
 		@Override
-		public void reduce(Boolean value) {
+		public void reduce(Pair<Long, Long> pair) {
 //			System.out.println(String.format("international = %s - total = %s", internationalMovements, totalMovements));
-			totalMovements.getAndAdd(1L);
-			if (value) internationalMovements.getAndAdd(1L);
+			internationalMovements.addAndGet(pair.getKey());
+			totalMovements.addAndGet(pair.getValue());
 		}
 
 		@Override
