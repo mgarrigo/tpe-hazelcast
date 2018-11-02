@@ -29,7 +29,7 @@ public class MapReduceLogger {
                 new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss:SSSS");
         StringBuilder sb = new StringBuilder();
         sb.append(ft.format(dNow)).append(" INFO ");
-        sb.append(this.logClass).append(" ");
+        sb.append(this.logClass).append(" - ");
         sb.append(description);
         if (this.path == null){
             System.out.println(sb.toString());
